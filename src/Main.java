@@ -1,6 +1,5 @@
 public class Main {
     public static void main(String[] args) {
-//        int test = new CYK();
         String[][] R = new String[][]{
             {"S", "AB"},
             {"A", "CD", "CF"},
@@ -10,5 +9,9 @@ public class Main {
             {"E", "c"},
             {"F", "AD"}
         };
+//        System.out.println(new CYK("test", R).resolve());
+        CYK test = new CYK("test", R);
+        test.resolve();
+        test.createTab();
     }
 }
