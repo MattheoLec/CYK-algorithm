@@ -19,11 +19,22 @@ public class CYK {
     public boolean[][][] resolve(){
         for (int i=0; i<n; i++){
             for (int j=0; j<m; j++){
-                if (R[j].length == 2 && R[j][1].matches("[a-z]+")) {
-                    P[0][i][j] = true;
+                for (int k=1; k<R[j].length; k++) { // Travel inside grammar rule
+                    if (R[j][k].charAt(0) == w.charAt(i)) {
+                        P[0][i][j] = true;
+                    }
                 }
             }
         }
+//        for (int i=1; i<n; i++){
+//            for (int j=0; j<n-i+1; j++){
+//                for (int k=0; k<i-1; k++){
+//                    for (int l=0; l<m; l++){
+//                        if (R[])
+//                    }
+//                }
+//            }
+//        }
         return P;
     }
 

@@ -10,7 +10,7 @@ public class Main {
             {"F", "AD"}
         };
 //        System.out.println(new CYK("test", R).resolve());
-        CYK test = new CYK("test", R);
+        CYK test = new CYK("aaabbbcc", R);
         test.resolve();
         test.createTab();
     }
