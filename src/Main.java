@@ -9,9 +9,9 @@ public class Main {
             {"E", "c"},
             {"F", "AD"}
         };
-//        System.out.println(new CYK("test", R).resolve());
+
         CYK test = new CYK("aaabbbcc", R);
-        test.resolve();
+        System.out.println("Inclusion of the word in the grammar: " + test.resolve());
         test.createTab();
     }
 }
