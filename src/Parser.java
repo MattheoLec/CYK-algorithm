@@ -88,8 +88,34 @@ public class Parser {
         return false;
     }
 
-    public boolean parseBU() {
-        return false;
+    public boolean parseBU(String string) {
+        char[] s = string.toCharArray();
+        int n = s.length;
+        boolean[][][] table = new boolean[grammar.getNTRSize()][n][n];
+        System.out.println(Arrays.toString(grammar.getTR()));
+
+        for (int i=0; i<n; i++) {
+            for (int j = 0; j < grammar.getTRSize(); j++) {
+                if (grammar.getTR()[j] != null && grammar.getTR()[j].charAt(0) == s[i]) {
+                    table[j][0][i] = true;
+                }
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n-i; j++) {
+                for (int k = 0; k < i; k++) {
+                    for (int l = 0; l < grammar.getNTRSize(); l++) {
+                        for (int itt = 0; itt < grammar.getNTR().get(l).size() - 1; itt += 2) {
+                            if (table[grammar.getNTR().get(l).get(itt)][k][j] && table[grammar.getNTR().get(l).get(itt + 1)][i - k - 1][j + k + 1]) {
+                                table[l][i][j] = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return table[0][n-1][0];
     }
 
     public boolean parseTD() {
