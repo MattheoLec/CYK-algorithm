@@ -12,7 +12,6 @@ public class Grammar {
     public Grammar(String[][] TR, String[][] NTR) {
         this.TR = TR;
         this.NTR = NTR;
-        convertedTR = new String[NTR.length];
         for (String[] rule : TR) {
             if (rule.length != 2) {
                 throw new IllegalArgumentException("Terminal rules must have 2 elements (1 left-hand side and 1 right-hand side");
@@ -47,11 +46,24 @@ public class Grammar {
             convertedNTR.get(nonTerminalIndex).add(NTmap.get(strings[1].charAt(0)));
             convertedNTR.get(nonTerminalIndex).add(NTmap.get(strings[1].charAt(1)));
         }
+        convertedTR = new String[NTmap.size()];
         for (String[] strings : TR) {
             int nonTerminalIndex = NTmap.get(strings[0].charAt(0));
             convertedTR[nonTerminalIndex] = strings[1];
         }
     }
+
+    public String[] getTR() {
+        return convertedTR;
+    }
+
+    public List<List<Integer>> getNTR() {
+        return convertedNTR;
+    }
+
+    public int getTRSize() { return convertedTR.length; }
+
+    public int getNTRSize() { return convertedNTR.size(); }
 
     public void test() {
         System.out.println(convertedNTR);

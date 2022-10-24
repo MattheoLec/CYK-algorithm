@@ -1,5 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String[][] R = new String[][]{
             {"S", "AB"},
             {"A", "CD", "CF"},
@@ -22,11 +25,17 @@ public class Main {
                 {"A", "SR"},
         };
 
-        Grammar testNR = new Grammar(TR,NTR);
-        testNR.test();
+        String s = "aaaaaabbbbbcccccccc";
 
-        CYK test = new CYK("aaabbbcc", R);
-        System.out.println("Inclusion of the word in the grammar: " + test.resolve());
-        test.createTab();
+//        Grammar testNR = new Grammar(TR,NTR);
+//        testNR.test();
+
+        Parser parser = new Parser();
+        System.out.println(parser.parseNaive(s));
+        parser.testPrintParse();
+
+//        CYK test = new CYK("aaabbbcc", R);
+//        System.out.println("Inclusion of the word in the grammar: " + test.resolve());
+//        test.createTab();
     }
 }
