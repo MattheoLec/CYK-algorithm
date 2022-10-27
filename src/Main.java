@@ -1,41 +1,59 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Enumeration;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String[][] R = new String[][]{
-            {"S", "AB"},
-            {"A", "CD", "CF"},
-            {"B", "c", "EB"},
-            {"C", "a"},
-            {"D", "b"},
-            {"E", "c"},
-            {"F", "AD"}
+        String grammar = "src/Files/grammar1.txt";
+        Parser parser = new Parser(grammar);
+        String currentInputString;
+
+        Enumeration<String> inputString1 = new Enumeration<>() {
+            private String current = "";
+            @Override
+            public boolean hasMoreElements() {
+                return true;
+            }
+            @Override
+            public String nextElement() {
+                current = "((((((((((((((((((((" + current + "))))))))))))))))))))";
+                return current;
+            }
         };
 
-
-        String[][] TR = new String[][]{
-                {"L", "("},
-                {"R", ")"},
+        Enumeration<String> inputString2 = new Enumeration<>() {
+            private String current = "";
+            @Override
+            public boolean hasMoreElements() {
+                return true;
+            }
+            @Override
+            public String nextElement() {
+                current = "()()()()()()()()()()" + current + "()()()()()()()()()()";
+                return current;
+            }
         };
-        String[][] NTR = new String[][]{
-                {"S", "SS"},
-                {"S", "LA"},
-                {"S", "LR"},
-                {"A", "SR"},
-        };
 
-        String s = "aaaaaabbbbbcccccccc";
-
-//        Grammar testNR = new Grammar(TR,NTR);
-//        testNR.test();
-
-        Parser parser = new Parser();
-        System.out.println(parser.parseNaive(s));
-        parser.testPrintParse();
-
-//        CYK test = new CYK("aaabbbcc", R);
-//        System.out.println("Inclusion of the word in the grammar: " + test.resolve());
-//        test.createTab();
+        currentInputString="";
+        while (currentInputString.length() < 2500) {
+            currentInputString = inputString1.nextElement();
+            System.out.println("Input length : "+currentInputString.length());
+            System.gc();
+            System.out.println("Bottom-up :");
+            long startTime1 = currentTimeMillis();
+            System.out.println(parser.parseBU(currentInputString));
+            long runningTime1 = currentTimeMillis() - startTime1;
+            System.out.println("Running time : "+runningTime1);
+            System.out.println("Counter : "+parser.getCounter());
+            System.gc();
+            System.out.println("Top-down :");
+            long startTime2 = currentTimeMillis();
+            System.out.println(parser.parseTD(currentInputString));
+            long runningTime2 = currentTimeMillis() - startTime2;
+            System.out.println("Running time : "+runningTime2);
+            System.out.println("Counter : "+parser.getCounter());
+            System.out.println("------------------");
+        }
     }
 }

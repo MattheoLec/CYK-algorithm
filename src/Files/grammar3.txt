@@ -1,3 +1,0 @@
-S AB
-A a
-B b

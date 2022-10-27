@@ -2,14 +2,17 @@ import java.io.*;
 import java.util.Arrays;
 
 public class Parser {
-    private String[][] TR;
-    private String[][] NTR;
+    private final String[][] TR;
+    private final String[][] NTR;
     private int TRLength;
     private int NTRLength;
-    private Grammar grammar;
+    private final Grammar grammar;
+    private Boolean[][][] table;
+    private char[] s;
+    int counter;
 
-    public Parser() throws IOException {
-        File file = new File("src/Files/grammar2.txt");
+    public Parser(String g) throws IOException {
+        File file = new File(g);
         BufferedReader reader = new BufferedReader(new FileReader(file));
 
         // Looking for the number of Terminal rules and non-Terminal rules
@@ -59,7 +62,7 @@ public class Parser {
         grammar = new Grammar(TR, NTR);
     }
 
-    public void testPrintParse() {
+    public void printParsedGrammar() {
         System.out.println("-------------");
         System.out.println(Arrays.deepToString(TR));
         System.out.println("-------------");
@@ -68,19 +71,21 @@ public class Parser {
     }
 
     public boolean parseNaive(String string) {
-        char[] s = string.toCharArray();
+        s = string.toCharArray();
         int n = s.length;
+        counter = 0;
 
-        return parseNaive(0,0,n, s);
+        return parseNaive(0,0,n);
     }
 
-    public boolean parseNaive(int c, int i, int j, char[] s) {
+    public boolean parseNaive(int c, int i, int j) {
+        counter++;
         if (i == j-1) {
             return grammar.getTR()[c] != null && grammar.getTR()[c].charAt(0) == s[i];
         }
         for (int itt=0; itt<grammar.getNTR().get(c).size()-1; itt+=2) {
             for (int k = i+1; k <= j-1; k++) {
-                if (parseNaive(grammar.getNTR().get(c).get(itt),i,k,s) && parseNaive(grammar.getNTR().get(c).get(itt+1),k,j,s)){
+                if (parseNaive(grammar.getNTR().get(c).get(itt),i,k) && parseNaive(grammar.getNTR().get(c).get(itt+1),k,j)){
                     return true;
                 }
             }
@@ -89,10 +94,15 @@ public class Parser {
     }
 
     public boolean parseBU(String string) {
-        char[] s = string.toCharArray();
+        s = string.toCharArray();
         int n = s.length;
-        boolean[][][] table = new boolean[grammar.getNTRSize()][n][n];
-        System.out.println(Arrays.toString(grammar.getTR()));
+        table = new Boolean[grammar.getNTRSize()][n][n];
+        for (int i = 0; i < grammar.getNTRSize(); i++) {
+            for (int j = 0; j < n; j++) {
+                Arrays.fill(table[i][j], false);
+            }
+        }
+        counter = 0;
 
         for (int i=0; i<n; i++) {
             for (int j = 0; j < grammar.getTRSize(); j++) {
@@ -110,6 +120,7 @@ public class Parser {
                                 table[l][i][j] = true;
                                 break;
                             }
+                            counter++;
                         }
                     }
                 }
@@ -118,7 +129,36 @@ public class Parser {
         return table[0][n-1][0];
     }
 
-    public boolean parseTD() {
+    public boolean parseTD(String string) {
+        s = string.toCharArray();
+        int n = s.length;
+        table = new Boolean[grammar.getNTRSize()][n+1][n+1];
+        counter = 0;
+
+        return parseTD(0, 0, n);
+    }
+
+    public boolean parseTD(int c, int i, int j) {
+        counter++;
+        if (i == j-1) {
+            return grammar.getTR()[c] != null && grammar.getTR()[c].charAt(0) == s[i];
+        }
+        if (table[c][i][j] != null) {
+            return table[c][i][j];
+        }
+        for (int itt=0; itt<grammar.getNTR().get(c).size()-1; itt+=2) {
+            for (int k = i+1; k <= j-1; k++) {
+                if (parseTD(grammar.getNTR().get(c).get(itt),i,k) && parseTD(grammar.getNTR().get(c).get(itt+1),k,j)){
+                    table[c][i][j] = true;
+                    return true;
+                }
+            }
+        }
+        table[c][i][j] = false;
         return false;
+    }
+
+    public int getCounter() {
+        return counter;
     }
 }

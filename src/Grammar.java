@@ -1,17 +1,12 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class Grammar {
-    private String[][] TR; // Terminal rules
-    private String[][] NTR; // Non-terminal rules
-    private String [] convertedTR;
-    private List<List<Integer>> convertedNTR = new ArrayList<>();
+    private final String [] convertedTR;
+    private final List<List<Integer>> convertedNTR = new ArrayList<>();
 
     public Grammar(String[][] TR, String[][] NTR) {
-        this.TR = TR;
-        this.NTR = NTR;
         for (String[] rule : TR) {
             if (rule.length != 2) {
                 throw new IllegalArgumentException("Terminal rules must have 2 elements (1 left-hand side and 1 right-hand side");
@@ -64,9 +59,4 @@ public class Grammar {
     public int getTRSize() { return convertedTR.length; }
 
     public int getNTRSize() { return convertedNTR.size(); }
-
-    public void test() {
-        System.out.println(convertedNTR);
-        System.out.println(Arrays.toString(convertedTR));
-    }
 }
