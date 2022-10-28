@@ -5,7 +5,7 @@ import static java.lang.System.currentTimeMillis;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String grammar = "src/Files/grammar1.txt";
+        String grammar = "Files/grammar1.txt";
         Parser parser = new Parser(grammar);
         String currentInputString;
 
