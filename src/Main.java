@@ -9,7 +9,7 @@ public class Main {
         Parser parser = new Parser(grammar);
         String currentInputString;
 
-        Enumeration<String> inputString1 = new Enumeration<>() {
+        Enumeration<String> inputString1 = new Enumeration<String>() {
             private String current = "";
             @Override
             public boolean hasMoreElements() {
@@ -22,7 +22,7 @@ public class Main {
             }
         };
 
-        Enumeration<String> inputString2 = new Enumeration<>() {
+        Enumeration<String> inputString2 = new Enumeration<String>() {
             private String current = "";
             @Override
             public boolean hasMoreElements() {
